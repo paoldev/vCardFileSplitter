@@ -1,0 +1,389 @@
+﻿using System.Text;
+
+namespace vCardFileSplitter
+{
+    internal class VCardContact
+    {
+        public string Version { get; private set; } = string.Empty;
+        public string DisplayName { get; private set; } = string.Empty;
+        public string Birthday { get; private set; } = string.Empty;
+        public IReadOnlyList<string> Telephone { get { return _Telephone; } }
+        public IReadOnlyList<string> Email { get { return _Email; } }
+        public IReadOnlyList<string> Address { get { return _Address; } }
+        public IReadOnlyList<string> Organization { get { return _Organization; } }
+        public IReadOnlyList<Image> Photos { get { return _Photos; } }
+
+
+        public IReadOnlyList<string> RawLines { get { return _RawLines; } }
+
+        public void AddRawLine(string line)
+        {
+            Validate(line);
+
+            _RawLines.Add(line);
+
+            if (IsEndVCard(line))
+            {
+                ProcessLines();
+            }
+        }
+
+        public void Reset()
+        {
+            _RawLines.Clear();
+            ProcessLines();
+        }
+
+        public static async Task<List<VCardContact>> LoadFromFile(string filename)
+        {
+            List<VCardContact> contacts = new();
+
+            if (!string.IsNullOrEmpty(filename))
+            {
+                try
+                {
+                    var allLines = await File.ReadAllLinesAsync(filename);
+
+                    VCardContact? currentContact = null;
+                    int lineIndex = 0;
+                    foreach (var line in allLines)
+                    {
+                        lineIndex++;
+                        if (currentContact == null)
+                        {
+                            if (IsBeginVCard(line))
+                            {
+                                currentContact = new VCardContact();
+                            }
+                            else if (!string.IsNullOrWhiteSpace(line))
+                            {
+                                throw new Exception("Invalid line " + lineIndex + ": " + line);
+                            }
+                        }
+
+                        if (currentContact != null)
+                        {
+                            currentContact.AddRawLine(line);
+                            if (IsEndVCard(line))
+                            {
+                                contacts.Add(currentContact);
+                                currentContact = null;
+                            }
+                        }
+                    }
+                }
+                catch
+                { }
+            }
+
+            return contacts;
+        }
+
+        public static async Task<List<VCardContact>> LoadFromFiles(IEnumerable<string> filenames)
+        {
+            List<VCardContact> contacts = new();
+
+            if (filenames != null)
+            {
+                foreach (var file in filenames)
+                {
+                    try
+                    {
+                        var filecontacts = await LoadFromFile(file);
+                        contacts.AddRange(filecontacts);
+                    }
+                    catch
+                    { }
+                }
+            }
+
+            return contacts;
+        }
+
+        private void Validate(string line)
+        {
+            bool isBeginVCard = IsBeginVCard(line);
+
+            if (_RawLines.Count == 0 && !isBeginVCard)
+            {
+                throw new Exception("Invalid file format: first line MUST match 'BEGIN:VCARD' tag");
+            }
+
+            if (_RawLines.Count > 0 && isBeginVCard)
+            {
+                throw new Exception("Invalid file format: 'BEGIN:VCARD' already added.");
+            }
+
+            if (_RawLines.Count > 0 && IsEndVCard(_RawLines[_RawLines.Count - 1]))
+            {
+                throw new Exception("Invalid file format: 'END:VCARD' already added.");
+            }
+        }
+
+        private void ProcessLines()
+        {
+            Version = string.Empty;
+            DisplayName = string.Empty;
+            Birthday = string.Empty;
+            _Telephone = new();
+            _Email = new();
+            _Address = new();
+            _Organization = new();
+            _Photos = new();
+
+            var lines = GetUnfoldedLines();
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                string propertyName;
+                string propertyFullName;
+                IEnumerable<string>? parameters = null;
+                string value;
+                if (GetProperty(lines[i], out propertyName, out propertyFullName, out parameters, out value))
+                {
+                    if (IsProperty(propertyName, "VERSION"))
+                    {
+                        Version = value;
+                    }
+                    else if (IsProperty(propertyName, "FN"))
+                    {
+                        //Give FN: a priority higher than N:
+                        //Overwrite DisplayName generated by N:
+                        DisplayName = DecodePropertyValue(parameters, value);
+                    }
+                    else if (IsProperty(propertyName, "N"))
+                    {
+                        //Give FN: a priority higher than N:
+                        //Don't overwrite DisplayName generated by FN:
+                        if (string.IsNullOrWhiteSpace(DisplayName))
+                        {
+                            var values = value.Split(';');
+                            if (values.Length > 0)
+                            {
+                                string familyName = !string.IsNullOrWhiteSpace(values[0]) ? DecodePropertyValue(parameters, values[0]) : string.Empty;
+                                string firstName = ((values.Length > 1) && !string.IsNullOrWhiteSpace(values[1])) ? DecodePropertyValue(parameters, values[1]) : string.Empty;
+                                string secondName = ((values.Length > 2) && !string.IsNullOrWhiteSpace(values[2])) ? DecodePropertyValue(parameters, values[2]) : string.Empty;
+                                string prefixName = ((values.Length > 3) && !string.IsNullOrWhiteSpace(values[3])) ? DecodePropertyValue(parameters, values[3]) : string.Empty;
+                                string suffixName = ((values.Length > 4) && !string.IsNullOrWhiteSpace(values[4])) ? DecodePropertyValue(parameters, values[4]) : string.Empty;
+
+                                var merge = new List<string> {
+                                    prefixName,
+                                    firstName,
+                                    secondName,
+                                    familyName,
+                                    suffixName
+                                };
+
+                                merge.RemoveAll(string.IsNullOrWhiteSpace);
+
+                                DisplayName = string.Join(' ', merge);
+                            }
+                        }
+                    }
+                    else if (IsProperty(propertyName, "BDAY"))
+                    {
+                        Birthday = value;
+                    }
+                    else if (IsProperty(propertyName, "TEL"))
+                    {
+                        //Include additional infos (home, work, ...)
+                        _Telephone.Add(GetAdditionalInfo(parameters) + value);
+                    }
+                    else if (IsProperty(propertyName, "EMAIL"))
+                    {
+                        //Include additional infos (home, work, ...)
+                        _Email.Add(GetAdditionalInfo(parameters) + value);
+                    }
+                    else if (IsProperty(propertyName, "ADR"))
+                    {
+                        //Include additional infos (home, work, ...)
+                        _Address.Add(GetAdditionalInfo(parameters) + DecodePropertyValue(parameters, value));
+                    }
+                    else if (IsProperty(propertyName, "ORG"))
+                    {
+                        //Include additional infos (home, work, ...)
+                        _Organization.Add(GetAdditionalInfo(parameters) + DecodePropertyValue(parameters, value));
+                    }
+                    else if (IsProperty(propertyName, "PHOTO"))
+                    {
+                        string? base64ImageData = null;
+                        if (value.StartsWith("data:image/", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            var items = value.Split(',');
+                            if (items.Length == 2)
+                            {
+                                if (items[0].Equals("base64", StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    base64ImageData = items[1];
+                                }
+                            }
+                        }
+                        else if (parameters != null)
+                        {
+                            if (parameters.Any(p => p.Equals("ENCODING=BASE64", StringComparison.InvariantCultureIgnoreCase) || p.Equals("ENCODING=B", StringComparison.InvariantCultureIgnoreCase)))
+                            {
+                                base64ImageData = value;
+                            }
+                        }
+
+                        // Try a 'brute force' way to get the image.
+                        if (base64ImageData != null)
+                        {
+                            try
+                            {
+                                var bytes = Convert.FromBase64String(base64ImageData);
+                                using (MemoryStream memoryStream = new(bytes))
+                                {
+                                    var image = Image.FromStream(memoryStream);
+                                    _Photos.Add(image);
+                                }
+                            }
+                            catch
+                            {
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        private List<string> GetUnfoldedLines()
+        {
+            var newlines = new List<string>();
+            foreach (var line in _RawLines)
+            {
+                if (newlines.Count > 0 && line.StartsWith(" ") || line.StartsWith("\t"))
+                {
+                    newlines[newlines.Count - 1] = newlines[newlines.Count - 1] + line.Substring(1);
+                }
+                else if (newlines.Count > 0 && newlines[newlines.Count - 1].EndsWith("=") && newlines[newlines.Count - 1].Contains("ENCODING=QUOTED-PRINTABLE", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    newlines[newlines.Count - 1] = newlines[newlines.Count - 1] + "\r\n" + line;
+                }
+                else
+                {
+                    newlines.Add(line);
+                }
+            }
+            return newlines;
+        }
+
+        private static bool IsBeginVCard(string line)
+        {
+            return line.Equals("BEGIN:VCARD", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private static bool IsEndVCard(string line)
+        {
+            return line.Equals("END:VCARD", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private static bool GetProperty(string unfoldedLine, out string propertyName, out string propertyFullName, out IEnumerable<string>? parameters, out string value)
+        {
+            propertyName = "";
+            propertyFullName = "";
+            parameters = null;
+            value = "";
+            var separatorIndex = unfoldedLine.IndexOf(':');
+            if (separatorIndex > 0)
+            {
+                propertyFullName = unfoldedLine.Substring(0, separatorIndex);
+                if (propertyFullName[0] != ';')
+                {
+                    var items = propertyFullName.Split(';');
+                    if (items.Length > 0)
+                    {
+                        propertyName = items[0].Trim();
+
+                        parameters = items.Where((x, i) => (i > 0)).Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x));
+
+                        value = unfoldedLine.Substring(separatorIndex + 1);
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsProperty(string property, string propertyName)
+        {
+            return property.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private static bool HasUTF8QuotedPrintableValue(IEnumerable<string>? parameters)
+        {
+            return /*(parameters?.Any(p => p.Equals("CHARSET=UTF-8", StringComparison.InvariantCultureIgnoreCase)) ?? false) &&*/
+                (parameters?.Any(p => p.Equals("ENCODING=QUOTED-PRINTABLE", StringComparison.InvariantCultureIgnoreCase)) ?? false);
+        }
+
+        private static string DecodeUTF8QuotedPrintableValue(string value)
+        {
+            var bytes = new List<byte>();
+            for (int i = 0; i < value.Length;)
+            {
+                if (value[i] == '=')
+                {
+                    if (i < value.Length - 2)
+                    {
+                        if (value[i + 1] == '\r' && value[i + 2] == '\n')
+                        {
+                            //This tag concatenates two lines: ignore it.
+                        }
+                        else
+                        {
+                            var hex = value.Substring(i + 1, 2);
+                            byte b = byte.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+                            bytes.Add(b);
+                        }
+                        i += 3;
+                    }
+                    else
+                    {
+                        throw new Exception("Invalid value in '" + value + "'");
+                    }
+                }
+                else
+                {
+                    bytes.Add((byte)value[i]);
+                    i++;
+                }
+            }
+
+            return Encoding.UTF8.GetString(bytes.ToArray());
+        }
+
+        private static string DecodePropertyValue(IEnumerable<string>? parameters, string value)
+        {
+            if (HasUTF8QuotedPrintableValue(parameters))
+            {
+                return DecodeUTF8QuotedPrintableValue(value);
+            }
+            return value;
+        }
+
+        private static string GetAdditionalInfo(IEnumerable<string>? parameters)
+        {
+            if (parameters?.Count() > 0)
+            {
+                var info = string.Join(";", parameters.Where(x => !x.Equals("CHARSET=UTF-8", StringComparison.InvariantCultureIgnoreCase) && !x.Equals("ENCODING=QUOTED-PRINTABLE", StringComparison.InvariantCultureIgnoreCase))).Trim();
+                if (!string.IsNullOrEmpty(info))
+                {
+                    info += ":";
+                }
+                return info;
+            }
+
+            return string.Empty;
+        }
+
+        private List<string> _Telephone = new();
+        private List<string> _Email = new();
+        private List<string> _Address = new();
+        private List<string> _Organization = new();
+        private List<string> _RawLines = new();
+        private List<Image> _Photos = new();
+    }
+}
