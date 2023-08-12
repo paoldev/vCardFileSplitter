@@ -8,7 +8,7 @@ namespace vCardFileSplitter
         {
             InitializeComponent();
 
-            comboBoxSplitOrMerge.SelectedIndex = 0;
+            comboBoxSplitOrMerge.SelectedIndex = 0; //Split
         }
 
         private async void buttonBrowse_Click(object sender, EventArgs e)
@@ -58,7 +58,7 @@ namespace vCardFileSplitter
                                 File.WriteAllLines(filename, item.RawLines);
                             }
 
-                            MessageBox.Show("Export to " + folderBrowserDialog1.SelectedPath + " completed", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Export to " + folderBrowserDialog1.SelectedPath + " successfully completed.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         catch (Exception ex)
                         {
@@ -81,7 +81,7 @@ namespace vCardFileSplitter
 
                             File.WriteAllLines(saveFileDialog1.FileName, RawLines);
 
-                            MessageBox.Show("Export to " + saveFileDialog1.FileName + " completed", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Export to " + saveFileDialog1.FileName + " successfully completed.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         catch (Exception ex)
                         {
@@ -107,7 +107,7 @@ namespace vCardFileSplitter
                              new string[] { textBoxSourceVcf.Text } :
                              Directory.EnumerateFiles(textBoxSourceVcf.Text);
 
-                    AllContacts = await VCardContact.LoadFromFiles(files);
+                    AllContacts.AddRange(await VCardContact.LoadFromFiles(files));
                 }
                 catch { }
             }
@@ -281,9 +281,6 @@ namespace vCardFileSplitter
             textBoxFilter.Text = string.Empty;
         }
 
-        private List<VCardContact> AllContacts = new();
-        private List<ListViewItem> AllItems = new();
-
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var aboutBox = new AboutBox1();
@@ -295,5 +292,8 @@ namespace vCardFileSplitter
         {
             Application.Exit();
         }
+
+        private readonly List<VCardContact> AllContacts = new();
+        private readonly List<ListViewItem> AllItems = new();
     }
 }
