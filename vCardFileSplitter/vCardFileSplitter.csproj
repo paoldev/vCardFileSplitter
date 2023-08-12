@@ -7,25 +7,25 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Authors>paoldev</Authors>
-	<Copyright>(C) 2023</Copyright>
-	<PackageProjectUrl>https://github.com/paoldev/vCardFileSplitter</PackageProjectUrl>
-	<RepositoryUrl>https://github.com/paoldev/vCardFileSplitter.git</RepositoryUrl>
-	<Description>Split or merge vcf and vCard files without applying any further processing to original file lines.</Description>
-	<Title>vCard File Splitter</Title>
-	<RepositoryType>git</RepositoryType>
-	<PackageTags>vcf;vcard;split;merge</PackageTags>
-	<Product>vCard File Splitter</Product>
+    <Copyright>(C) 2023</Copyright>
+    <PackageProjectUrl>https://github.com/paoldev/vCardFileSplitter</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/paoldev/vCardFileSplitter.git</RepositoryUrl>
+    <Description>Split or merge vcf and vCard files without applying any further processing to original file lines.</Description>
+    <Title>vCard File Splitter</Title>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>vcf;vcard;split;merge</PackageTags>
+    <Product>vCard File Splitter</Product>
   </PropertyGroup>
 
-	<ItemGroup>
-		<AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-			<_Parameter1>CustomTitle</_Parameter1>
-			<_Parameter2>$(Title)</_Parameter2>
-		</AssemblyAttribute>
-		<AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-			<_Parameter1>ProjectUrl</_Parameter1>
-			<_Parameter2>$(PackageProjectUrl)</_Parameter2>
-		</AssemblyAttribute>
-	</ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+    <_Parameter1>CustomTitle</_Parameter1>
+    <_Parameter2>$(Title)</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+    <_Parameter1>ProjectUrl</_Parameter1>
+    <_Parameter2>$(PackageProjectUrl)</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
 
 </Project>
