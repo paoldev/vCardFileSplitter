@@ -11,7 +11,7 @@ namespace vCardFileSplitter
             comboBoxSplitOrMerge.SelectedIndex = 0; //Split
         }
 
-        private async void buttonBrowse_Click(object sender, EventArgs e)
+        private async void OnButtonBrowse_Click(object sender, EventArgs e)
         {
             if (IsSplitMode())
             {
@@ -34,12 +34,12 @@ namespace vCardFileSplitter
             }
         }
 
-        private async void buttonRefresh_Click(object sender, EventArgs e)
+        private async void OnButtonRefresh_Click(object sender, EventArgs e)
         {
             await ProcessVcf();
         }
 
-        private void buttonExport_Click(object sender, EventArgs e)
+        private void OnButtonExport_Click(object sender, EventArgs e)
         {
             if (AllContacts.Count > 0)
             {
@@ -139,10 +139,12 @@ namespace vCardFileSplitter
             for (int i = 0; i < AllContacts.Count; i++)
             {
                 var contact = AllContacts[i];
-                var item = new ListViewItem();
-                item.Tag = contact;
-                item.Text = " " + (i + 1).ToString();
-                item.ToolTipText = string.Join(Environment.NewLine, contact.RawLines);
+                var item = new ListViewItem
+                {
+                    Tag = contact,
+                    Text = " " + (i + 1).ToString(),
+                    ToolTipText = string.Join(Environment.NewLine, contact.RawLines)
+                };
                 if (contact.Photos?.Count > 0)
                 {
                     if (listView1.SmallImageList.Images.Count == 0)
@@ -199,8 +201,7 @@ namespace vCardFileSplitter
             {
                 foreach (ListViewItem item in selectedItems)
                 {
-                    var contact = item.Tag as VCardContact;
-                    if (contact != null)
+                    if (item.Tag is VCardContact contact)
                     {
                         textBoxPreview.Text += string.Join(Environment.NewLine, contact.RawLines);
                         textBoxPreview.Text += Environment.NewLine;
@@ -252,7 +253,7 @@ namespace vCardFileSplitter
             return sanitized;
         }
 
-        private async void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private async void OnComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBoxSourceVcf.Text = string.Empty;
             textBoxPreview.Text = string.Empty;
@@ -266,34 +267,36 @@ namespace vCardFileSplitter
             return (comboBoxSplitOrMerge.Text == "Split");
         }
 
-        private void listView1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void OnListView1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             RefreshPreview();
         }
 
-        private void textBoxFilter_TextChanged(object sender, EventArgs e)
+        private void OnTextBoxFilter_TextChanged(object sender, EventArgs e)
         {
             RefreshListItems();
         }
 
-        private void buttonClearFilter_Click(object sender, EventArgs e)
+        private void OnButtonClearFilter_Click(object sender, EventArgs e)
         {
             textBoxFilter.Text = string.Empty;
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OnAboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var aboutBox = new AboutBox1();
-            aboutBox.StartPosition = FormStartPosition.CenterParent;
+            var aboutBox = new AboutBox1
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
             aboutBox.ShowDialog(this);
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OnExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        private readonly List<VCardContact> AllContacts = new();
-        private readonly List<ListViewItem> AllItems = new();
+        private readonly List<VCardContact> AllContacts = [];
+        private readonly List<ListViewItem> AllItems = [];
     }
 }

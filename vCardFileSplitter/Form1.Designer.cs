@@ -65,7 +65,7 @@
             buttonBrowse.TabIndex = 0;
             buttonBrowse.Text = "Select file";
             buttonBrowse.UseVisualStyleBackColor = true;
-            buttonBrowse.Click += buttonBrowse_Click;
+            buttonBrowse.Click += OnButtonBrowse_Click;
             // 
             // textBoxSourceVcf
             // 
@@ -83,7 +83,7 @@
             buttonRefresh.TabIndex = 2;
             buttonRefresh.Text = "Refresh";
             buttonRefresh.UseVisualStyleBackColor = true;
-            buttonRefresh.Click += buttonRefresh_Click;
+            buttonRefresh.Click += OnButtonRefresh_Click;
             // 
             // listView1
             // 
@@ -97,7 +97,7 @@
             listView1.TabIndex = 3;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
-            listView1.ItemSelectionChanged += listView1_ItemSelectionChanged;
+            listView1.ItemSelectionChanged += OnListView1_ItemSelectionChanged;
             // 
             // buttonExport
             // 
@@ -108,7 +108,7 @@
             buttonExport.TabIndex = 4;
             buttonExport.Text = "Export";
             buttonExport.UseVisualStyleBackColor = true;
-            buttonExport.Click += buttonExport_Click;
+            buttonExport.Click += OnButtonExport_Click;
             // 
             // openFileDialog1
             // 
@@ -125,7 +125,7 @@
             comboBoxSplitOrMerge.Name = "comboBoxSplitOrMerge";
             comboBoxSplitOrMerge.Size = new Size(182, 33);
             comboBoxSplitOrMerge.TabIndex = 5;
-            comboBoxSplitOrMerge.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            comboBoxSplitOrMerge.SelectedIndexChanged += OnComboBox1_SelectedIndexChanged;
             // 
             // saveFileDialog1
             // 
@@ -198,7 +198,7 @@
             textBoxFilter.Name = "textBoxFilter";
             textBoxFilter.Size = new Size(1215, 31);
             textBoxFilter.TabIndex = 1;
-            textBoxFilter.TextChanged += textBoxFilter_TextChanged;
+            textBoxFilter.TextChanged += OnTextBoxFilter_TextChanged;
             // 
             // buttonClearFilter
             // 
@@ -209,7 +209,7 @@
             buttonClearFilter.TabIndex = 2;
             buttonClearFilter.Text = "X";
             buttonClearFilter.UseVisualStyleBackColor = true;
-            buttonClearFilter.Click += buttonClearFilter_Click;
+            buttonClearFilter.Click += OnButtonClearFilter_Click;
             // 
             // menuStrip1
             // 
@@ -233,7 +233,7 @@
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.Size = new Size(164, 34);
             aboutToolStripMenuItem.Text = "About";
-            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            aboutToolStripMenuItem.Click += OnAboutToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
@@ -245,7 +245,7 @@
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             exitToolStripMenuItem.Size = new Size(164, 34);
             exitToolStripMenuItem.Text = "Exit";
-            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
+            exitToolStripMenuItem.Click += OnExitToolStripMenuItem_Click;
             // 
             // Form1
             // 
