@@ -191,6 +191,7 @@ namespace vCardFileSplitter
             {
                 listView1.Items.AddRange(AllItems.Where(x => x.SubItems.Cast<ListViewSubItem>().Any(t => t.Text.Contains(textBoxFilter.Text, StringComparison.InvariantCultureIgnoreCase))).ToArray());
             }
+            labelItemsNumber.Text = (listView1.Items.Count == 1) ? "1 item" : $"{listView1.Items.Count} items";
         }
 
         private void RefreshPreview()

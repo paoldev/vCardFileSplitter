@@ -49,6 +49,7 @@
             aboutToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
+            labelItemsNumber = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -247,11 +248,21 @@
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += OnExitToolStripMenuItem_Click;
             // 
+            // labelItemsNumber
+            // 
+            labelItemsNumber.AutoSize = true;
+            labelItemsNumber.Location = new Point(142, 172);
+            labelItemsNumber.Name = "labelItemsNumber";
+            labelItemsNumber.Size = new Size(70, 25);
+            labelItemsNumber.TabIndex = 9;
+            labelItemsNumber.Text = "0 items";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1378, 1122);
+            Controls.Add(labelItemsNumber);
             Controls.Add(label2);
             Controls.Add(splitContainer1);
             Controls.Add(textBoxFilter);
@@ -302,5 +313,6 @@
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem exitToolStripMenuItem;
+        private Label labelItemsNumber;
     }
 }
