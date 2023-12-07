@@ -127,7 +127,7 @@
             linkRepositoryUrl.TabStop = true;
             linkRepositoryUrl.Text = "url";
             linkRepositoryUrl.TextAlign = ContentAlignment.MiddleLeft;
-            linkRepositoryUrl.LinkClicked += linkLabel1_LinkClicked;
+            linkRepositoryUrl.LinkClicked += OnLinkLabel1_LinkClicked;
             // 
             // textBoxDescription
             // 
@@ -153,7 +153,7 @@
             okButton.Size = new Size(125, 39);
             okButton.TabIndex = 24;
             okButton.Text = "&OK";
-            okButton.Click += okButton_Click;
+            okButton.Click += OnOkButton_Click;
             // 
             // AboutBox1
             // 

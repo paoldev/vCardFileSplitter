@@ -20,7 +20,7 @@ namespace vCardFileSplitter
 
         #region Assembly Attribute Accessors
 
-        public string AssemblyTitle
+        public static string AssemblyTitle
         {
             get
             {
@@ -50,7 +50,7 @@ namespace vCardFileSplitter
             }
         }
 
-        public string AssemblyVersion
+        public static string AssemblyVersion
         {
             get
             {
@@ -58,7 +58,7 @@ namespace vCardFileSplitter
             }
         }
 
-        public string AssemblyDescription
+        public static string AssemblyDescription
         {
             get
             {
@@ -71,7 +71,7 @@ namespace vCardFileSplitter
             }
         }
 
-        public string AssemblyProduct
+        public static string AssemblyProduct
         {
             get
             {
@@ -84,7 +84,7 @@ namespace vCardFileSplitter
             }
         }
 
-        public string AssemblyCopyright
+        public static string AssemblyCopyright
         {
             get
             {
@@ -97,7 +97,7 @@ namespace vCardFileSplitter
             }
         }
 
-        public string AssemblyCompany
+        public static string AssemblyCompany
         {
             get
             {
@@ -110,7 +110,7 @@ namespace vCardFileSplitter
             }
         }
 
-        public string AssemblyRepositoryUrl
+        public static string AssemblyRepositoryUrl
         {
             get
             {
@@ -118,7 +118,7 @@ namespace vCardFileSplitter
             }
         }
 
-        public string AssemblyProjectUrl
+        public static string AssemblyProjectUrl
         {
             get
             {
@@ -133,7 +133,7 @@ namespace vCardFileSplitter
             }
         }
 
-        private string GetCustomMetadataAttribute(string name)
+        private static string GetCustomMetadataAttribute(string name)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var attributes = assembly.GetCustomAttributes(typeof(AssemblyMetadataAttribute), false);
@@ -143,12 +143,12 @@ namespace vCardFileSplitter
 
         #endregion
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void OnOkButton_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void OnLinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (e.Link != null)
             {
