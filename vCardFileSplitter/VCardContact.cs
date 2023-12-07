@@ -36,7 +36,7 @@ namespace vCardFileSplitter
 
         public static async Task<List<VCardContact>> LoadFromFile(string filename)
         {
-            List<VCardContact> contacts = new();
+            List<VCardContact> contacts = [];
 
             if (!string.IsNullOrEmpty(filename))
             {
@@ -81,7 +81,7 @@ namespace vCardFileSplitter
 
         public static async Task<List<VCardContact>> LoadFromFiles(IEnumerable<string> filenames)
         {
-            List<VCardContact> contacts = new();
+            List<VCardContact> contacts = [];
 
             if (filenames != null)
             {
@@ -114,7 +114,7 @@ namespace vCardFileSplitter
                 throw new Exception("Invalid file format: 'BEGIN:VCARD' already added.");
             }
 
-            if (_RawLines.Count > 0 && IsEndVCard(_RawLines[_RawLines.Count - 1]))
+            if (_RawLines.Count > 0 && IsEndVCard(_RawLines[^1]))
             {
                 throw new Exception("Invalid file format: 'END:VCARD' already added.");
             }
@@ -125,21 +125,17 @@ namespace vCardFileSplitter
             Version = string.Empty;
             DisplayName = string.Empty;
             Birthday = string.Empty;
-            _Telephone = new();
-            _Email = new();
-            _Address = new();
-            _Organization = new();
-            _Photos = new();
+            _Telephone = [];
+            _Email = [];
+            _Address = [];
+            _Organization = [];
+            _Photos = [];
 
             var lines = GetUnfoldedLines();
 
             for (int i = 0; i < lines.Count; i++)
             {
-                string propertyName;
-                string propertyFullName;
-                IEnumerable<string>? parameters = null;
-                string value;
-                if (GetProperty(lines[i], out propertyName, out propertyFullName, out parameters, out value))
+                if (GetProperty(lines[i], out string propertyName, out string propertyFullName, out IEnumerable<string>? parameters, out string value))
                 {
                     if (IsProperty(propertyName, "VERSION"))
                     {
@@ -232,11 +228,9 @@ namespace vCardFileSplitter
                             try
                             {
                                 var bytes = Convert.FromBase64String(base64ImageData);
-                                using (MemoryStream memoryStream = new(bytes))
-                                {
-                                    var image = Image.FromStream(memoryStream);
-                                    _Photos.Add(image);
-                                }
+                                using MemoryStream memoryStream = new(bytes);
+                                var image = Image.FromStream(memoryStream);
+                                _Photos.Add(image);
                             }
                             catch
                             {
@@ -253,13 +247,13 @@ namespace vCardFileSplitter
             var newlines = new List<string>();
             foreach (var line in _RawLines)
             {
-                if (newlines.Count > 0 && line.StartsWith(" ") || line.StartsWith("\t"))
+                if (newlines.Count > 0 && line.StartsWith(' ') || line.StartsWith('\t'))
                 {
-                    newlines[newlines.Count - 1] = newlines[newlines.Count - 1] + line.Substring(1);
+                    newlines[^1] = newlines[^1] + line[1..];
                 }
-                else if (newlines.Count > 0 && newlines[newlines.Count - 1].EndsWith("=") && newlines[newlines.Count - 1].Contains("ENCODING=QUOTED-PRINTABLE", StringComparison.InvariantCultureIgnoreCase))
+                else if (newlines.Count > 0 && newlines[^1].EndsWith('=') && newlines[^1].Contains("ENCODING=QUOTED-PRINTABLE", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    newlines[newlines.Count - 1] = newlines[newlines.Count - 1] + "\r\n" + line;
+                    newlines[^1] = newlines[^1] + "\r\n" + line;
                 }
                 else
                 {
@@ -288,7 +282,7 @@ namespace vCardFileSplitter
             var separatorIndex = unfoldedLine.IndexOf(':');
             if (separatorIndex > 0)
             {
-                propertyFullName = unfoldedLine.Substring(0, separatorIndex);
+                propertyFullName = unfoldedLine[..separatorIndex];
                 if (propertyFullName[0] != ';')
                 {
                     var items = propertyFullName.Split(';');
@@ -298,7 +292,7 @@ namespace vCardFileSplitter
 
                         parameters = items.Where((x, i) => (i > 0)).Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x));
 
-                        value = unfoldedLine.Substring(separatorIndex + 1);
+                        value = unfoldedLine[(separatorIndex + 1)..];
 
                         return true;
                     }
@@ -379,11 +373,11 @@ namespace vCardFileSplitter
             return string.Empty;
         }
 
-        private List<string> _Telephone = new();
-        private List<string> _Email = new();
-        private List<string> _Address = new();
-        private List<string> _Organization = new();
-        private List<string> _RawLines = new();
-        private List<Image> _Photos = new();
+        private List<string> _Telephone = [];
+        private List<string> _Email = [];
+        private List<string> _Address = [];
+        private List<string> _Organization = [];
+        private readonly List<string> _RawLines = [];
+        private List<Image> _Photos = [];
     }
 }
