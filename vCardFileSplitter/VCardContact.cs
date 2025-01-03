@@ -346,7 +346,7 @@ namespace vCardFileSplitter
                 }
             }
 
-            return Encoding.UTF8.GetString(bytes.ToArray());
+            return Encoding.UTF8.GetString([.. bytes]);
         }
 
         private static string DecodePropertyValue(IEnumerable<string>? parameters, string value)

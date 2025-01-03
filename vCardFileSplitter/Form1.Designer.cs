@@ -60,9 +60,10 @@
             // 
             // buttonBrowse
             // 
-            buttonBrowse.Location = new Point(217, 99);
+            buttonBrowse.Location = new Point(152, 59);
+            buttonBrowse.Margin = new Padding(2);
             buttonBrowse.Name = "buttonBrowse";
-            buttonBrowse.Size = new Size(125, 34);
+            buttonBrowse.Size = new Size(88, 25);
             buttonBrowse.TabIndex = 0;
             buttonBrowse.Text = "Select file";
             buttonBrowse.UseVisualStyleBackColor = true;
@@ -71,16 +72,18 @@
             // textBoxSourceVcf
             // 
             textBoxSourceVcf.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBoxSourceVcf.Location = new Point(365, 101);
+            textBoxSourceVcf.Location = new Point(256, 61);
+            textBoxSourceVcf.Margin = new Padding(2);
             textBoxSourceVcf.Name = "textBoxSourceVcf";
-            textBoxSourceVcf.Size = new Size(996, 31);
+            textBoxSourceVcf.Size = new Size(698, 23);
             textBoxSourceVcf.TabIndex = 1;
             // 
             // buttonRefresh
             // 
-            buttonRefresh.Location = new Point(12, 167);
+            buttonRefresh.Location = new Point(8, 100);
+            buttonRefresh.Margin = new Padding(2);
             buttonRefresh.Name = "buttonRefresh";
-            buttonRefresh.Size = new Size(112, 34);
+            buttonRefresh.Size = new Size(78, 25);
             buttonRefresh.TabIndex = 2;
             buttonRefresh.Text = "Refresh";
             buttonRefresh.UseVisualStyleBackColor = true;
@@ -92,9 +95,10 @@
             listView1.FullRowSelect = true;
             listView1.GridLines = true;
             listView1.Location = new Point(0, 0);
+            listView1.Margin = new Padding(2);
             listView1.Name = "listView1";
             listView1.ShowItemToolTips = true;
-            listView1.Size = new Size(1349, 413);
+            listView1.Size = new Size(965, 236);
             listView1.TabIndex = 3;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
@@ -103,9 +107,10 @@
             // buttonExport
             // 
             buttonExport.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonExport.Location = new Point(1249, 167);
+            buttonExport.Location = new Point(874, 100);
+            buttonExport.Margin = new Padding(2);
             buttonExport.Name = "buttonExport";
-            buttonExport.Size = new Size(112, 34);
+            buttonExport.Size = new Size(78, 25);
             buttonExport.TabIndex = 4;
             buttonExport.Text = "Export";
             buttonExport.UseVisualStyleBackColor = true;
@@ -122,9 +127,10 @@
             comboBoxSplitOrMerge.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxSplitOrMerge.FormattingEnabled = true;
             comboBoxSplitOrMerge.Items.AddRange(new object[] { "Split", "Merge" });
-            comboBoxSplitOrMerge.Location = new Point(12, 101);
+            comboBoxSplitOrMerge.Location = new Point(8, 61);
+            comboBoxSplitOrMerge.Margin = new Padding(2);
             comboBoxSplitOrMerge.Name = "comboBoxSplitOrMerge";
-            comboBoxSplitOrMerge.Size = new Size(182, 33);
+            comboBoxSplitOrMerge.Size = new Size(129, 23);
             comboBoxSplitOrMerge.TabIndex = 5;
             comboBoxSplitOrMerge.SelectedIndexChanged += OnComboBox1_SelectedIndexChanged;
             // 
@@ -136,16 +142,18 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 50);
+            label1.Location = new Point(8, 30);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(754, 25);
+            label1.Size = new Size(501, 15);
             label1.TabIndex = 6;
             label1.Text = "Split or merge vcf and vCard files without applying any further processing to original file lines.";
             // 
             // splitContainer1
             // 
             splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            splitContainer1.Location = new Point(12, 283);
+            splitContainer1.Location = new Point(0, 163);
+            splitContainer1.Margin = new Padding(2);
             splitContainer1.Name = "splitContainer1";
             splitContainer1.Orientation = Orientation.Horizontal;
             // 
@@ -156,8 +164,9 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(groupBox1);
-            splitContainer1.Size = new Size(1349, 827);
-            splitContainer1.SplitterDistance = 413;
+            splitContainer1.Size = new Size(965, 474);
+            splitContainer1.SplitterDistance = 236;
+            splitContainer1.SplitterWidth = 2;
             splitContainer1.TabIndex = 7;
             // 
             // groupBox1
@@ -165,8 +174,10 @@
             groupBox1.Controls.Add(textBoxPreview);
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1349, 410);
+            groupBox1.Padding = new Padding(2);
+            groupBox1.Size = new Size(965, 236);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Preview";
@@ -174,39 +185,43 @@
             // textBoxPreview
             // 
             textBoxPreview.Dock = DockStyle.Fill;
-            textBoxPreview.Location = new Point(3, 27);
+            textBoxPreview.Location = new Point(2, 18);
+            textBoxPreview.Margin = new Padding(2);
             textBoxPreview.Multiline = true;
             textBoxPreview.Name = "textBoxPreview";
             textBoxPreview.ReadOnly = true;
             textBoxPreview.ScrollBars = ScrollBars.Both;
-            textBoxPreview.Size = new Size(1343, 380);
+            textBoxPreview.Size = new Size(961, 216);
             textBoxPreview.TabIndex = 0;
             textBoxPreview.WordWrap = false;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 229);
+            label2.Location = new Point(8, 137);
+            label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(50, 25);
+            label2.Size = new Size(33, 15);
             label2.TabIndex = 0;
             label2.Text = "Filter";
             // 
             // textBoxFilter
             // 
             textBoxFilter.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBoxFilter.Location = new Point(79, 227);
+            textBoxFilter.Location = new Point(55, 136);
+            textBoxFilter.Margin = new Padding(2);
             textBoxFilter.Name = "textBoxFilter";
-            textBoxFilter.Size = new Size(1215, 31);
+            textBoxFilter.Size = new Size(852, 23);
             textBoxFilter.TabIndex = 1;
             textBoxFilter.TextChanged += OnTextBoxFilter_TextChanged;
             // 
             // buttonClearFilter
             // 
             buttonClearFilter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonClearFilter.Location = new Point(1309, 224);
+            buttonClearFilter.Location = new Point(916, 134);
+            buttonClearFilter.Margin = new Padding(2);
             buttonClearFilter.Name = "buttonClearFilter";
-            buttonClearFilter.Size = new Size(52, 34);
+            buttonClearFilter.Size = new Size(36, 25);
             buttonClearFilter.TabIndex = 2;
             buttonClearFilter.Text = "X";
             buttonClearFilter.UseVisualStyleBackColor = true;
@@ -218,7 +233,8 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1378, 33);
+            menuStrip1.Padding = new Padding(4, 1, 0, 1);
+            menuStrip1.Size = new Size(965, 24);
             menuStrip1.TabIndex = 8;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -226,42 +242,43 @@
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem, toolStripSeparator1, exitToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(54, 29);
+            fileToolStripMenuItem.Size = new Size(37, 22);
             fileToolStripMenuItem.Text = "File";
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(164, 34);
+            aboutToolStripMenuItem.Size = new Size(107, 22);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += OnAboutToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(161, 6);
+            toolStripSeparator1.Size = new Size(104, 6);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(164, 34);
+            exitToolStripMenuItem.Size = new Size(107, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += OnExitToolStripMenuItem_Click;
             // 
             // labelItemsNumber
             // 
             labelItemsNumber.AutoSize = true;
-            labelItemsNumber.Location = new Point(142, 172);
+            labelItemsNumber.Location = new Point(99, 103);
+            labelItemsNumber.Margin = new Padding(2, 0, 2, 0);
             labelItemsNumber.Name = "labelItemsNumber";
-            labelItemsNumber.Size = new Size(70, 25);
+            labelItemsNumber.Size = new Size(45, 15);
             labelItemsNumber.TabIndex = 9;
             labelItemsNumber.Text = "0 items";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1378, 1122);
+            ClientSize = new Size(965, 637);
             Controls.Add(labelItemsNumber);
             Controls.Add(label2);
             Controls.Add(splitContainer1);
@@ -275,7 +292,8 @@
             Controls.Add(buttonBrowse);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
-            MinimumSize = new Size(400, 400);
+            Margin = new Padding(2);
+            MinimumSize = new Size(285, 256);
             Name = "Form1";
             Text = "vCard File Splitter";
             splitContainer1.Panel1.ResumeLayout(false);

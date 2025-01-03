@@ -104,7 +104,7 @@ namespace vCardFileSplitter
                 try
                 {
                     var files = IsSplitMode() ?
-                             new string[] { textBoxSourceVcf.Text } :
+                             [textBoxSourceVcf.Text] :
                              Directory.EnumerateFiles(textBoxSourceVcf.Text);
 
                     AllContacts.AddRange(await VCardContact.LoadFromFiles(files));
@@ -185,7 +185,7 @@ namespace vCardFileSplitter
             listView1.Items.Clear();
             if (string.IsNullOrEmpty(textBoxFilter.Text))
             {
-                listView1.Items.AddRange(AllItems.ToArray());
+                listView1.Items.AddRange([.. AllItems]);
             }
             else
             {
