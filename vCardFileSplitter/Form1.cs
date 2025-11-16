@@ -111,7 +111,7 @@ namespace vCardFileSplitter
                 }
                 catch { }
             }
-            AllContacts.Sort((VCardContact x, VCardContact y) => x.DisplayName.CompareTo(y.DisplayName));
+            AllContacts.Sort((x, y) => x.DisplayName.CompareTo(y.DisplayName));
 
             RefreshListView();
 
@@ -189,7 +189,7 @@ namespace vCardFileSplitter
             }
             else
             {
-                listView1.Items.AddRange(AllItems.Where(x => x.SubItems.Cast<ListViewSubItem>().Any(t => t.Text.Contains(textBoxFilter.Text, StringComparison.InvariantCultureIgnoreCase))).ToArray());
+                listView1.Items.AddRange([.. AllItems.Where(x => x.SubItems.Cast<ListViewSubItem>().Any(t => t.Text.Contains(textBoxFilter.Text, StringComparison.InvariantCultureIgnoreCase)))]);
             }
             labelItemsNumber.Text = (listView1.Items.Count == 1) ? "1 item" : $"{listView1.Items.Count} items";
         }
