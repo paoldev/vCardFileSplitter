@@ -3,6 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](LICENSE.txt)
 [![Build and Create Release](https://github.com/paoldev/vCardFileSplitter/actions/workflows/dotnet_create_release.yml/badge.svg)](https://github.com/paoldev/vCardFileSplitter/releases)
 
+vCard File Splitter (c) 2023-2026 paoldev  
+  
 Split or merge vcf and vCard files without applying any further processing to original file lines.  
   
 This application requires the [.NET 10.0 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0); it can be automatically downloaded and installed on the application's first run.  

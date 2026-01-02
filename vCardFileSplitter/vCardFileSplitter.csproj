@@ -7,7 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Authors>paoldev</Authors>
-    <Copyright>(C) 2023-2025</Copyright>
+    <Copyright>(C) 2023-2026</Copyright>
     <PackageProjectUrl>https://github.com/paoldev/vCardFileSplitter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/paoldev/vCardFileSplitter.git</RepositoryUrl>
     <Description>Split or merge vcf and vCard files without applying any further processing to original file lines.</Description>
